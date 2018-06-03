@@ -13,6 +13,7 @@ namespace EasyBeer.Controllers
             var users = new List<User>();
             users.Add(new User() { Name = "Douglas Menddes"});
             users.Add(new User() { Name = "Felipe Tofoli"});
+            users.Add(new User() { Name = "Mayara Mendes"});
             return View(users);
         }
         

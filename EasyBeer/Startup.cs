@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EasyBeer.Constants;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -43,6 +45,20 @@ namespace EasyBeer
 
             app.UseStaticFiles();
 
+            app.Use(async (context, next) =>
+            {
+                await next();
+                
+                if (context.Response.StatusCode == 404 &&
+                    !Path.HasExtension(context.Request.Path.Value) &&
+                    !context.Request.Path.Value.StartsWith(StartupConstant.API_PATH))
+                {
+                    context.Request.Path = StartupConstant.INDEX_HTML_PATH;
+                    await next();
+                }
+            });
+            
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
